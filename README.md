@@ -1,103 +1,59 @@
-# Multi-Algorithm Comparative Study: On-Policy vs Off-Policy Deep RL in Gymnasium Classic Control Tasks
+# 强化学习算法对比项目
 
-## 项目介绍
+> On-Policy vs Off-Policy 深度强化学习算法在 Gymnasium 经典控制任务上的对比实现
 
-本项目实现并对比了 On-Policy 和 Off-Policy 的深度强化学习算法在 Gymnasium 经典控制任务上的表现。
+---
+
+## 📋 目录
+
+- [项目简介](#项目简介)
+- [安装说明](#安装说明)
+- [快速开始](#快速开始)
+- [项目结构](#项目结构)
+- [算法说明](#算法说明)
+- [运行测试](#运行测试)
+- [实验建议](#实验建议)
+
+---
+
+## 项目简介
+
+本项目从零实现了 5 种经典强化学习算法，在 Gymnasium 经典控制任务上进行对比实验，分析 On-Policy 与 Off-Policy 方法在收敛速度、稳定性和样本效率上的差异。
 
 ### 实现的算法
 
-- **On-Policy**：
-  - REINFORCE（带 baseline）
-  - A2C
-  - PPO（核心算法）
-- **Off-Policy**：
-  - DQN（适用于离散动作空间）
-  - SAC（适用于连续动作空间）
+| 类型 | 算法 | 说明 |
+|------|------|------|
+| On-Policy | REINFORCE | 带 baseline 的策略梯度 |
+| On-Policy | A2C | Advantage Actor-Critic |
+| On-Policy | PPO | Proximal Policy Optimization（核心） |
+| Off-Policy | DQN | Deep Q-Network（离散动作） |
+| Off-Policy | SAC | Soft Actor-Critic（连续动作） |
 
-### 推荐环境
+### 实验环境
 
-- CartPole-v1（简单验证）
-- LunarLander-v2（中等难度，离散动作）
-- Pendulum-v1（连续动作空间）
+| 环境 | 难度 | 动作空间 | 用途 |
+|------|------|---------|------|
+| CartPole-v1 | 简单 | 离散 | 入门验证 |
+| LunarLander-v2 | 中等 | 离散 | 核心对比 |
+| Pendulum-v1 | 中等 | 连续 | SAC 验证 |
 
-## 项目结构
+---
 
-```
-/home/kche/work/RL/
-├── config/
-│   ├── __init__.py
-│   ├── hyperparameters.py       # 各算法的超参数配置
-│   └── env_config.py             # 环境配置
-├── algorithms/
-│   ├── __init__.py
-│   ├── base/
-│   │   ├── __init__.py
-│   │   ├── base_agent.py         # 基类（所有算法的公共接口）
-│   │   └── replay_buffer.py      # 共享的ReplayBuffer（Off-Policy用）
-│   ├── on_policy/
-│   │   ├── __init__.py
-│   │   ├── reinforce.py          # REINFORCE (带baseline)
-│   │   ├── a2c.py                 # A2C
-│   │   └── ppo.py                 # PPO (核心，手动实现)
-│   └── off_policy/
-│       ├── __init__.py
-│       ├── dqn.py                 # DQN
-│       └── sac.py                 # SAC (连续控制)
-├── envs/
-│   ├── __init__.py
-│   └── wrapper.py                # 环境封装
-├── utils/
-│   ├── __init__.py
-│   ├── training.py                # 训练循环、eval逻辑
-│   ├── logger.py                  # 简单日志
-│   ├── plotting.py                # 绘图功能
-│   └── utils.py                   # 工具函数（seed设置等）
-├── tests/
-│   ├── __init__.py
-│   ├── test_utils.py           # 工具函数测试
-│   ├── test_replay_buffer.py   # ReplayBuffer测试
-│   └── test_agents.py          # 算法接口测试
-├── main.py                        # 主入口
-├── run_experiments.py             # 实验批量运行脚本
-├── requirements.txt
-└── README.md
-```
-
-## 测试
-
-### 运行测试
+## 安装说明
 
 ```bash
-# 安装测试依赖
-pip install pytest pytest-cov
+# 1. 创建虚拟环境
+conda create -n rl_study python=3.10 -y
+conda activate rl_study
 
-# 运行所有测试
-pytest tests/ -v
-
-# 运行特定测试
-pytest tests/test_utils.py -v
-
-# 生成覆盖率报告
-pytest tests/ --cov=. --cov-report=html
+# 2. 安装依赖（使用清华镜像加速）
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
-### 测试覆盖
+---
 
-| 测试文件 | 覆盖内容 |
-|---------|---------|
-| `test_utils.py` | `set_seed`, `get_device`, `compute_returns` |
-| `test_replay_buffer.py` | `ReplayBuffer` 的 push/sample/capacity |
-| `test_agents.py` | 各算法的初始化、action选择、save/load |
-
-## 使用说明
-
-### 安装依赖
-
-```bash
-pip install -r requirements.txt
-```
-
-### 运行单个算法
+## 快速开始
 
 ```bash
 # 运行 REINFORCE（默认）
@@ -116,18 +72,108 @@ python main.py --algo reinforce --env CartPole-v1 --num_episodes 500
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| `--algo` | reinforce | 选择算法 (reinforce/a2c/ppo/dqn/sac) |
+| `--algo` | reinforce | 算法选择 (reinforce / a2c / ppo / dqn / sac) |
 | `--env` | CartPole-v1 | 训练环境 |
 | `--num_episodes` | 1000 | 训练回合数 |
 | `--num_eval_episodes` | 10 | 评估回合数 |
 | `--seed` | 42 | 随机种子 |
-| `--verbose` | True | 是否打印训练进度 |
+| `--verbose` | True | 打印训练进度 |
 
-## 实验设置建议
+---
 
-- 使用 5-8 个不同随机种子
-- 用 Stable-Baselines3 跑 Baseline 对比
-- 记录每个算法的收敛速度、最终回报、训练稳定性
+## 项目结构
+
+```
+RL/
+├── config/                  # 配置
+│   ├── hyperparameters.py   #   超参数
+│   └── env_config.py        #   环境配置
+├── algorithms/              # 算法
+│   ├── base/
+│   │   ├── base_agent.py    #   基类接口
+│   │   └── replay_buffer.py #   经验回放
+│   ├── on_policy/           #   On-Policy 算法
+│   │   ├── reinforce.py
+│   │   ├── a2c.py
+│   │   └── ppo.py
+│   └── off_policy/          #   Off-Policy 算法
+│       ├── dqn.py
+│       └── sac.py
+├── envs/
+│   └── wrapper.py           # 环境封装
+├── utils/                   # 工具
+│   ├── training.py          #   训练循环
+│   ├── logger.py            #   日志
+│   ├── plotting.py          #   绘图
+│   └── utils.py             #   seed / device 等
+├── tests/                   # 测试
+│   ├── test_utils.py
+│   ├── test_replay_buffer.py
+│   └── test_agents.py
+├── main.py                  # 主入口
+├── run_experiments.py       # 批量实验
+└── requirements.txt
+```
+
+---
+
+## 算法说明
+
+### REINFORCE with Baseline
+- 策略网络输出动作概率，价值网络提供 baseline
+- 优势函数：`A = G - V(s)`
+- 损失函数：`L = -log π(a|s) × A`
+
+### A2C (Advantage Actor-Critic)
+- 同步版本的 Actor-Critic
+- 用 TD 误差代替完整回报估算优势
+- Actor 学习策略，Critic 学习价值函数
+
+### PPO (Proximal Policy Optimization)
+- 核心算法，策略梯度最先进的实现之一
+- Clipping 机制限制策略更新幅度
+- GAE（广义优势估算）减小方差
+
+### DQN (Deep Q-Network)
+- 适用于离散动作空间
+- 经验回放打破数据相关性
+- 目标网络稳定训练，ε-贪婪平衡探索
+
+### SAC (Soft Actor-Critic)
+- 适用于连续动作空间
+- 最大熵框架：同时优化回报和策略随机性
+- 双 Q 网络缓解过估计，自动调整温度系数
+
+---
+
+## 运行测试
+
+```bash
+# 运行全部测试
+pytest tests/ -v
+
+# 运行单个测试
+pytest tests/test_agents.py -v
+
+# 生成覆盖率报告
+pytest tests/ --cov=. --cov-report=html
+```
+
+| 测试文件 | 覆盖内容 |
+|---------|---------|
+| `test_utils.py` | seed / device / compute_returns |
+| `test_replay_buffer.py` | push / sample / capacity |
+| `test_agents.py` | 初始化 / select_action / save & load |
+
+---
+
+## 实验建议
+
+- 使用 **5-8 个随机种子**消除随机性影响
+- 用 **Stable-Baselines3** 跑 Baseline 对比
+- 关注指标：平均回报、收敛速度、训练稳定性、样本效率
+
+---
 
 ## Abstract
 
