@@ -52,11 +52,42 @@
 │   ├── logger.py                  # 简单日志
 │   ├── plotting.py                # 绘图功能
 │   └── utils.py                   # 工具函数（seed设置等）
+├── tests/
+│   ├── __init__.py
+│   ├── test_utils.py           # 工具函数测试
+│   ├── test_replay_buffer.py   # ReplayBuffer测试
+│   └── test_agents.py          # 算法接口测试
 ├── main.py                        # 主入口
 ├── run_experiments.py             # 实验批量运行脚本
 ├── requirements.txt
 └── README.md
 ```
+
+## 测试
+
+### 运行测试
+
+```bash
+# 安装测试依赖
+pip install pytest pytest-cov
+
+# 运行所有测试
+pytest tests/ -v
+
+# 运行特定测试
+pytest tests/test_utils.py -v
+
+# 生成覆盖率报告
+pytest tests/ --cov=. --cov-report=html
+```
+
+### 测试覆盖
+
+| 测试文件 | 覆盖内容 |
+|---------|---------|
+| `test_utils.py` | `set_seed`, `get_device`, `compute_returns` |
+| `test_replay_buffer.py` | `ReplayBuffer` 的 push/sample/capacity |
+| `test_agents.py` | 各算法的初始化、action选择、save/load |
 
 ## 使用说明
 
