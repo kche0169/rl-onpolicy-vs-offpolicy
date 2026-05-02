@@ -15,7 +15,7 @@ def get_env_config(env_name: str) -> EnvConfig:
     """Get default config for common environments"""
     env_configs = {
         "CartPole-v1": EnvConfig("CartPole-v1", 4, 2, True),
-        "LunarLander-v2": EnvConfig("LunarLander-v2", 8, 4, True),
+        "LunarLander-v3": EnvConfig("LunarLander-v3", 8, 4, True),
         "Acrobot-v1": EnvConfig("Acrobot-v1", 6, 3, True),
         "Pendulum-v1": EnvConfig("Pendulum-v1", 3, 1, False, 2.0),
         "MountainCarContinuous-v0": EnvConfig("MountainCarContinuous-v0", 2, 1, False, 1.0),

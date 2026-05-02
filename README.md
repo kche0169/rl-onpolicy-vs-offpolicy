@@ -35,7 +35,7 @@
 | 环境 | 难度 | 动作空间 | 用途 |
 |------|------|---------|------|
 | CartPole-v1 | 简单 | 离散 | 入门验证 |
-| LunarLander-v2 | 中等 | 离散 | 核心对比 |
+| LunarLander-v3 | 中等 | 离散 | 核心对比 |
 | Pendulum-v1 | 中等 | 连续 | SAC 验证 |
 
 ---
@@ -177,4 +177,4 @@ pytest tests/ --cov=. --cov-report=html
 
 ## Abstract
 
-This project conducts a multi-algorithm comparative study of on-policy and off-policy deep reinforcement learning methods in Gymnasium classic control tasks. We implement and evaluate REINFORCE (with baseline), A2C, PPO (on-policy), as well as DQN and SAC (off-policy) on CartPole-v1, LunarLander-v2, and Pendulum-v1. Experiments with multiple random seeds analyze performance in terms of average return, convergence speed, stability, and sample efficiency. Results highlight the trade-offs between on-policy stability and off-policy sample efficiency, providing insights into algorithm selection for classic control problems.
+This project conducts a multi-algorithm comparative study of on-policy and off-policy deep reinforcement learning methods in Gymnasium classic control tasks. We implement and evaluate REINFORCE (with baseline), A2C, PPO (on-policy), as well as DQN and SAC (off-policy) on CartPole-v1, LunarLander-v3, and Pendulum-v1. Experiments with multiple random seeds analyze performance in terms of average return, convergence speed, stability, and sample efficiency. Results highlight the trade-offs between on-policy stability and off-policy sample efficiency, providing insights into algorithm selection for classic control problems.
