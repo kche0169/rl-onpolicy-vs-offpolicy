@@ -168,6 +168,29 @@ pytest tests/ --cov=. --cov-report=html
 
 ---
 
+## 可视化结果
+
+### 1. 查看汇总表
+```bash
+cat results/summary_CartPole-v1.txt
+```
+
+### 2. 生成对比图
+```bash
+# 自动生成所有环境的对比图和汇总表
+python visualize_results.py
+
+# 只看特定环境
+python visualize_results.py --env CartPole-v1
+python visualize_results.py --env LunarLander-v3
+python visualize_results.py --env Pendulum-v1
+```
+
+### 3. 查看图片
+生成的图片会保存在 `results/` 目录下，文件名格式为 `comparison_*.png`。
+
+---
+
 ## 实验建议
 
 - 使用 **5-8 个随机种子**消除随机性影响
